@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-from score import Score  # Import the Score class
+from score import Score  
 
 pygame.init()
 
@@ -34,11 +34,11 @@ def message(msg, color):
     mesg = pygame.font.SysFont("bahnschrift", 25).render(msg, True, color)
     dis.blit(mesg, [width / 6, height / 3])
 
-def gameLoop():  # Creating a function for the game loop
+def gameLoop():  
     game_over = False
     game_close = False
 
-    # Initialize score
+    # Initialize score which will automatically load the file
     score = Score()
 
     # Initialize snake position aligned to grid
@@ -88,6 +88,7 @@ def gameLoop():  # Creating a function for the game loop
                     x1_change = 0
 
         if x1 >= width or x1 < 0 or y1 >= height or y1 < score_display_height:
+            score.update_best()
             game_close = True
 
         x1 += x1_change
@@ -104,6 +105,7 @@ def gameLoop():  # Creating a function for the game loop
 
         for x in snake_list[:-1]:
             if x == snake_head:
+                score.update_best()
                 game_close = True
 
         our_snake(snake_block, snake_list)
@@ -116,6 +118,7 @@ def gameLoop():  # Creating a function for the game loop
             foody = round(random.randrange(score_display_height, height - snake_block) / 10.0) * 10.0
             length_of_snake += 1
             score.increase()  # Increase score when food is eaten
+            score.update_best()
 
         clock.tick(snake_speed)
 
